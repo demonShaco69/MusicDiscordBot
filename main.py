@@ -125,6 +125,7 @@ class YoutubeMusic(commands.Cog):
                 elif vc.is_paused():
                     await vc.resume()
                 else:
+
                     await ctx.message.channel.send('Enter song name or url for me to play it')
             else:
                 track = await wavelink.YouTubeTrack.search(song, return_first=True)
