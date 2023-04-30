@@ -1,3 +1,3 @@
-discordToken = "Enter your discord token"
+discordToken = "Enter discord token"
 wavelinkPassword = 'youshallnotpass'
-tenorToken = 'Enter your tenor token'
+tenorToken = 'Enter tenor token'

@@ -10,6 +10,7 @@ import os
 import wavelink
 from data.dataOpleuhi import slappers, ways_of_delivery
 from data.secretData import discordToken, wavelinkPassword, tenorToken
+from data.ASCIIart import ASCIIart
 
 projectPath = os.path.dirname(os.path.abspath(__file__))
 subprocess.Popen("scripts\startServer.bat", cwd=projectPath)
@@ -65,6 +66,7 @@ class TrollTools(commands.Cog):
             channel = bot.get_channel(self.target_channel_id)
         [await channel.send(res) if self.target_channel_id is not None else await ctx.send(res)]
         self.target_channel_id = None
+        await ctx.message.delete()
 
     @commands.command(name='targetchat', description='Введите эту команду,'
                                                      ' чтобы определить чат,'
@@ -75,6 +77,7 @@ class TrollTools(commands.Cog):
             self.target_channel_id = int(chatID)
         except:
             pass
+        await ctx.message.delete()
 
 
 class CustomPlayer(wavelink.Player):
@@ -102,6 +105,7 @@ class YoutubeMusic(commands.Cog):
                 await ctx.message.channel.send('Already in a channel')
         else:
             await ctx.message.channel.send('There is nobody in a channel')
+        await ctx.message.delete()
 
     @commands.command(name='dc', description='Введите эту команду,'
                                              ' чтобы отсоединить бота от голосового чата')
@@ -111,6 +115,7 @@ class YoutubeMusic(commands.Cog):
             await vc.disconnect()
         else:
             await ctx.message.channel.send('I am not in a channel')
+        await ctx.message.delete()
 
     @commands.command(name='p', description='Введите URL или название видео,'
                                             ' аудио которого проиграет бот')
@@ -147,6 +152,7 @@ class YoutubeMusic(commands.Cog):
                 vc.queue.put(track)
                 if not vc.is_playing():
                     await vc.play(vc.queue.get())
+        await ctx.message.delete()
 
     @commands.command(name='pn', description='Введите эту команду,'
                                              ' чтобы заменить текущий трек')
@@ -168,6 +174,7 @@ class YoutubeMusic(commands.Cog):
                 await vc.play(track)
             else:
                 await ctx.message.channel.send('Enter song name or url for me to play it')
+        await ctx.message.delete()
 
     @commands.command(name='s', description='Введите эту команду,'
                                             'чтобы пропустить текущий трек')
@@ -185,6 +192,7 @@ class YoutubeMusic(commands.Cog):
                 await ctx.message.channel.send('Nothing is playing rn')
         else:
             await ctx.message.channel.send('I am not in a channel')
+        await ctx.message.delete()
 
     @commands.command(name='v', description='Введите эту команду и после неё число от 0 до 1000,'
                                             ' чтобы установить необходимую громкость')
@@ -202,6 +210,7 @@ class YoutubeMusic(commands.Cog):
                 await ctx.message.channel.send('Enter a digit between 0 and 1000 to set a volume level')
         else:
             await ctx.message.channel.send('I am not in a channel')
+        await ctx.message.delete()
 
     @commands.command(name='q', description='Введите эту команду,'
                                             ' чтобы вывести очередь в чат')
@@ -225,6 +234,7 @@ class YoutubeMusic(commands.Cog):
                 await ctx.message.channel.send('Queue is empty')
         else:
             await ctx.message.channel.send('I am not in a channel')
+        await ctx.message.delete()
 
     @commands.command(name='c', description='Введите эту команду,'
                                             'чтобы показать подробную информацию о треке')
@@ -238,6 +248,7 @@ class YoutubeMusic(commands.Cog):
                 await ctx.message.channel.send('Nothing is playing rn')
         else:
             await ctx.message.channel.send('I am not in a channel')
+        await ctx.message.delete()
 
     @commands.command(name='l', description='Включить/Выключить'
                                             ' повторение текущего трека')
@@ -255,6 +266,7 @@ class YoutubeMusic(commands.Cog):
                 await ctx.message.channel.send('Nothing is playing rn')
         else:
             await ctx.message.channel.send('I am not in a channel')
+        await ctx.message.delete()
 
 
 @bot.event
@@ -270,6 +282,14 @@ async def on_message(message):
                 "https://tenor.googleapis.com/v2/search?q=%s&key=%s&client_key=%s&limit=%s" % (
                     "pepe", 'AIzaSyBFqfN9tVHa6bJ537O-J3mcWL4E8jnfMnw', 'Beninger1', 1000)).json()['results']
             await message.channel.send(random.choice(r)['media_formats']['gif']['url'])
+        elif 'ascii' in message.content.lower() or 'ASCII' in message.content.lower():
+            a = random.choice(ASCIIart)
+            b = ''
+            for i in range(len(a)):
+                b += a[i]
+            while ' ' in b:
+                b = b.replace(' ', '\n')
+            await message.channel.send(b)
     await bot.process_commands(message)
 
 
